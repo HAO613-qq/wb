@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion"; 
-import { Coffee, Mail, Phone, MapPin } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // --- 1. 辅助组件 (必须在 Home 函数外部定义) ---
 const ScrollReveal = ({ children }: { children: React.ReactNode }) => (
@@ -16,47 +15,152 @@ const ScrollReveal = ({ children }: { children: React.ReactNode }) => (
   </motion.div>
 );
 
-const CoffeeEgg = () => (
-  <div className="relative group inline-block ml-2">
-    <Coffee className="w-5 h-5 text-gray-400 group-hover:text-orange-500 transition-colors" />
-    <motion.div
-      className="absolute -top-4 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100"
-      initial={false}
-    >
-      {[1, 2, 3].map((i) => (
-        <motion.span
-          key={i}
-          className="w-1 h-3 bg-gray-300 rounded-full blur-[1px]"
-          animate={{ y: [0, -8], opacity: [0, 1, 0], scale: [0.8, 1.2] }}
-          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.4 }}
-        />
-      ))}
-    </motion.div>
-  </div>
-);
+type L10nText = {
+  zh: string;
+  en: string;
+};
+
+type Bullet = {
+  label: L10nText;
+  text: L10nText;
+  tag?: L10nText;
+};
+
+type ExperienceItem = {
+  time: string;
+  org: L10nText;
+  role: L10nText;
+  bullets: Bullet[];
+};
+
+type ProjectItem = {
+  time: string;
+  name: L10nText;
+  role: L10nText;
+  bullets: Bullet[];
+};
+
+const WORK_EXPERIENCES: ExperienceItem[] = [
+  {
+    time: "2022.06 — 2025.06",
+    org: {
+      zh: "北京水木时代文化传播有限公司",
+      en: "Beijing Shuimu Age Culture Communication Co., Ltd.",
+    },
+    role: { zh: "品牌策划 | 广告业", en: "Brand Planner | Advertising Industry" },
+    bullets: [
+      {
+        label: { zh: "新媒体运营", en: "New Media Operations" },
+        text: {
+          zh: "负责国家林业和草原科学数据中心宣传类公众号全周期运营工作，涵盖策划采编、内容审核、线上发布等工作。累计发布科普、行业资讯类内容260余篇，平台总阅读量100万次，有效提升官方平台对外传播力与公信力。",
+          en: "Managed the full-cycle operations of the National Forestry and Grassland Scientific Data Center's promotional WeChat official account. Published 260+ popular science and industry news articles, achieving 1M+ total views and enhancing platform credibility.",
+        },
+      },
+      {
+        label: { zh: "品牌视觉物料策划", en: "Brand Visual Material Planning" },
+        text: {
+          zh: "专项负责国企、金融机构客户品牌宣传物料策划与落地工作，独立对接多家地方国企及金融类客户，统筹企业宣传画册、企业文化手册、形象手册等各类宣传物料的设计制作。全程跟进需求对接、创意策划、设计校对、印刷交付全流程，精准匹配国企品牌宣传调性与合规要求，保障宣传物料高标准落地。",
+          en: "Specially led the planning and delivery of brand promotional materials for state-owned enterprises (SOEs) and financial institutions. Independently managed client accounts, overseeing brochures and culture manuals from creative strategy to final print delivery under strict compliance.",
+        },
+      },
+      {
+        label: { zh: "流程优化与团队提效", en: "Process Optimization & Team Efficiency" },
+        tag: { zh: "2024年度最佳员工", en: "Best Employee of 2024" },
+        text: {
+          zh: "参与搭建品牌宣传内容生产及标准化审核机制，规范选题策划、文稿撰写、校对审核、发布全流程标准，有效缩短生产周期，提升内容出品合格率，助力团队规范化、高效化运营。",
+          en: "Participated in building the standardized content production and review mechanism. Streamlined topic planning, copywriting, and proofreading processes, effectively shortening production cycles and boosting team operational efficiency.",
+        },
+      },
+    ],
+  },
+  {
+    time: "2022.01 — 2022.06",
+    org: { zh: "北京新氧科技有限公司", en: "Beijing SoYoung Technology Co., Ltd." },
+    role: { zh: "活动运营实习生 | 互联网", en: "Campaign Operations Intern | Internet Industry" },
+    bullets: [
+      {
+        label: { zh: "品牌活动宣传统筹", en: "Brand Campaign Promotion" },
+        text: {
+          zh: "周年庆品牌评选活动宣传负责人，制定核心宣传方案并落地执行。联动10余家合作品牌及媒体资源，整合多方宣传渠道，统筹活动宣发节奏，活动相关话题全网曝光量超100万次，有效提升活动影响力。",
+          en: "Led promotion for the anniversary brand awards. Developed core campaign strategies, collaborated with 10+ partner brands and media, resulting in over 1M+ cross-platform exposures.",
+        },
+      },
+      {
+        label: { zh: "宣传内容产出", en: "Creative Content Production" },
+        text: {
+          zh: "负责活动宣传文案、推广海报文案等各类宣传物料撰写。通过精准的内容策划与渠道投放，助力平台新增用户2万余人次，活动整体参与率达90%，圆满完成品牌宣传引流任务。",
+          en: "Crafted promotional copy and poster text for the campaign. Attracted 20,000+ new users through precise content targeting and placement, driving a 90% overall campaign participation rate.",
+        },
+      },
+    ],
+  },
+];
+
+const WORK_PROJECTS: ProjectItem[] = [
+  {
+    time: "2024.09 — 2024.12",
+    name: { zh: "京东智狼等企业级视频制作统筹项目", en: "Enterprise Video Production Project (JD Zhilang, etc.)" },
+    role: { zh: "项目总控", en: "Project Director" },
+    bullets: [
+      {
+        label: { zh: "品牌宣传内容把控", en: "Brand Content Control" },
+        text: {
+          zh: "主导3D品牌宣传片创意策划与全流程统筹工作，精准传递企业品牌形象核心价值。",
+          en: "Spearheaded the creative planning and full-process orchestration of the 3D brand promotional video, accurately conveying core brand values.",
+        },
+      },
+      {
+        label: { zh: "全流程落地管控", en: "Full Lifecycle Management" },
+        text: {
+          zh: "统筹协调多方制作团队，制定标准化制作排期与验收规范，前置规避内容偏差、需求变更等风险，全程严格把控内容质量与交付节点，实现项目零延期、零客诉，成片作为企业官方宣传物料常态化使用。",
+          en: "Coordinated cross-functional production teams and established standardized schedules. Prevented scope creep, controlled quality tightly, and achieved zero delays and zero complaints. The final film is now used routinely as official corporate material.",
+        },
+      },
+    ],
+  },
+  {
+    time: "2022.12 — 2025.01",
+    name: { zh: "\"林家那些事儿\" 国家级公众号运营升级项目", en: "\"Lin's Stories\" National Official Account Upgrade" },
+    role: { zh: "项目负责人", en: "Project Leader" },
+    bullets: [
+      {
+        label: { zh: "平台优化升级", en: "Platform Optimization & Rebranding" },
+        text: {
+          zh: "主导国家林草局数据中心公众号品牌焕新升级工作，结合平台用户数据及传播需求，对原有栏目结构进行优化重组，新增数据科普特色板块，丰富平台宣传内容维度，有效提升平台用户留存率35%。",
+          en: "Led the rebranding of the State Forestry and Grassland Administration Data Center's official account. Restructured columns and introduced a dedicated data science section, successfully increasing user retention by 35%.",
+        },
+      },
+      {
+        label: { zh: "精品栏目打造", en: "Flagship Column Creation" },
+        text: {
+          zh: "严格把控内容专业性、严谨性，打造“林家故事”特色标杆栏目，累计产出优质原创科普、行业宣传内容50余篇，搭建起规范优质的内容宣传阵地，助力林草科普事业常态化宣传推广。",
+          en: "Maintained rigorous and professional content standards to build the 'Lin's Stories' flagship column. Generated 50+ premium original science popularization articles, establishing a normalized and high-quality promotional hub.",
+        },
+      },
+    ],
+  },
+  {
+    time: "2025.01 — 2025.02",
+    name: { zh: "小猿热搜短视频传播项目", en: "Xiaoyuan Hot Search Short Video Communication Project" },
+    role: { zh: "项目负责人", en: "Project Leader" },
+    bullets: [
+      {
+        label: { zh: "宣传机制搭建", en: "Response Mechanism Architecture" },
+        text: {
+          zh: "搭建“热点监测-选题策划-脚本审核-拍摄发布”短视频快速响应宣传机制，压缩内容生产链路，大幅提升热点内容宣发效率，保障热点宣传及时落地。",
+          en: "Established a rapid-response short video mechanism covering 'trend monitoring - topic selection - script review - shooting & release.' Compressed the content pipeline to ensure immediate execution of trending topics.",
+        },
+      },
+    ],
+  },
+];
 
 // --- 2. 主页面开始 ---
 export default function Home() {
   const [lang, setLang] = useState<"zh" | "en">("zh");
-  const [openWork, setOpenWork] = useState(false);
-  const [openWork2, setOpenWork2] = useState(false);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [activeWorkView, setActiveWorkView] = useState<"experience" | "projects">("experience");
+  const [openWorkId, setOpenWorkId] = useState<string | null>(null);
   const [activeBeyond, setActiveBeyond] = useState<string | null>(null);
-  // 复制微信相关的逻辑
-  const [copied, setCopied] = useState(false);
-  const handleCopyWeChat = () => {
-    navigator.clipboard.writeText("hqx5622"); 
-    setCopied(true);
-    console.log("点击成功！");
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveCardIndex((prev) => (prev + 1) % 3);
-    }, 3000);
-    return () => window.clearInterval(timer);
-  }, []);
 
   const content = {
     zh: {
@@ -135,36 +239,24 @@ export default function Home() {
   };
 
   const t = content[lang];
-  const getStackPositionClass = (position: number) => {
-    if (position === 0) {
-      return "z-30 translate-x-0 translate-y-0 scale-100 shadow-2xl group-hover:-translate-y-3 group-hover:scale-[1.03]";
-    }
-    if (position === 1) {
-      return "z-20 translate-x-4 translate-y-4 scale-100 shadow-xl group-hover:translate-x-2 group-hover:translate-y-2 group-hover:scale-[0.98]";
-    }
-    return "z-10 translate-x-8 translate-y-8 scale-100 shadow-lg group-hover:translate-x-4 group-hover:translate-y-4 group-hover:scale-[0.95]";
-  };
-
-  const renderStackedCarousel = (images: string[], className = "") => (
-    <div className={`relative w-full aspect-video md:aspect-[16/8] group mb-12 md:mb-16 ${className}`}>
-      {images.map((imageSrc, idx) => {
-        const position = (idx - activeCardIndex + images.length) % images.length;
-
-        return (
-          <div
-            key={imageSrc}
-            className={`absolute inset-0 rounded-3xl overflow-hidden border border-white/50 bg-white transition-all duration-700 ease-out ${getStackPositionClass(position)}`}
-          >
-            <img
-              src={imageSrc}
-              className="w-full h-full object-cover transition duration-700 ease-out brightness-95 contrast-[0.98] saturate-95 group-hover:brightness-100 group-hover:contrast-100 group-hover:saturate-100"
-            />
-            <div className="absolute inset-0 bg-black/5 pointer-events-none transition duration-700 ease-out group-hover:bg-black/0" />
-          </div>
-        );
-      })}
-    </div>
-  );
+  const activeWorkCards =
+    activeWorkView === "experience"
+      ? WORK_EXPERIENCES.map((item, index) => ({
+          id: `experience-${index}`,
+          time: item.time,
+          title: item.org,
+          role: item.role,
+          bullets: item.bullets,
+          accent: "green" as const,
+        }))
+      : WORK_PROJECTS.map((item, index) => ({
+          id: `project-${index}`,
+          time: item.time,
+          title: item.name,
+          role: item.role,
+          bullets: item.bullets,
+          accent: "blue" as const,
+        }));
 
   return (
     <main className="bg-gradient-to-b from-[#F5F5F7] via-[#FAFAFA] to-white text-[#1D1D1F] antialiased tracking-tight scroll-smooth">
@@ -230,6 +322,7 @@ export default function Home() {
               >
                 <img
                   src="/profile.jpg"
+                  alt={lang === "zh" ? "个人照片" : "Portrait photo"}
                   // 关键修改：去掉 pt-10 防止顶部分散。使用 block 确保撑开高度
                   className="w-full h-auto object-cover block" 
                 />
@@ -248,280 +341,106 @@ export default function Home() {
       <section id="work" className="py-40 px-6 max-w-5xl mx-auto">
         <h2 className="text-2xl font-semibold mb-12">{t.workTitle}</h2>
 
-        <div className="space-y-8">
-
-          <div
-            onClick={() => setOpenWork(!openWork)}
-            className="p-8 border border-white/60 bg-white/70 backdrop-blur-xl rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-1 transition duration-500 cursor-pointer"
+        <div className="mb-10 inline-flex rounded-full border border-gray-200/70 bg-[#f5f5f7] p-1">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveWorkView("experience");
+              setOpenWorkId(null);
+            }}
+            className={`rounded-full px-4 py-2 text-sm transition-all ${
+              activeWorkView === "experience" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+            }`}
           >
-
-            <div className="flex items-center justify-between">
-
-              <div>
-                <h3 className="text-lg font-medium">
-                  {lang === "zh"
-                    ? "北京水木时代文化传播有限公司"
-                    : "Beijing Waterwood Media"}
-                </h3>
-
-                <p className="text-sm text-gray-500 mt-1">
-                  2022 — 2025 ·
-                  {lang === "zh"
-                    ? " 高级客户执行"
-                    : " Senior Account Executive"}
-                </p>
-
-                <p className="text-sm text-gray-600 mt-3">
-                  {lang === "zh"
-                    ? "品牌传播 · 项目统筹 · 内容策略 · 新媒体运营"
-                    : "Brand communication · Project management · Content strategy"}
-                </p>
-              </div>
-
-              <div className="text-gray-400 text-sm">
-                {openWork ? "−" : "+"}
-              </div>
-
-            </div>
-
-
-            {/* EXPAND CONTENT */}
-            {openWork && (
-
-              <div className="mt-24 flex flex-col gap-12 md:gap-16">
-
-                {/* PROJECT 01 */}
-                <div className="max-w-[96%] w-full mx-auto min-h-[400px] px-6 md:px-8 py-8 md:py-10 rounded-3xl border border-gray-200/40 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all duration-500 backdrop-blur-xl bg-[#FAFAFA] overflow-hidden">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16">
-                    {/* TEXT */}
-                    <div className="w-full md:w-1/2 flex flex-col justify-center">
-
-                      <div className="text-sm text-gray-400">
-                        01
-                      </div>
-
-                      <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-tight mt-3">
-                        {lang === "zh"
-                          ? "内容生态建设：把行业壁垒转化为大众共鸣"
-                          : "Building Content Ecosystems for Public Engagement"}
-                      </h3>
-
-                      <p className="text-sm md:text-base opacity-80 leading-relaxed mt-4">
-                        {lang === "zh"
-                          ? "服务国家林草局（林草科学中心）、京东物流等客户，将专业行业内容转化为可持续传播的品牌叙事。"
-                          : "Collaborated with public institutions and enterprise brands, transforming complex industry knowledge into scalable storytelling systems."}
-                      </p>
-
-                      <div className="space-y-2 text-sm text-gray-600/85 leading-6 mt-4">
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 粉丝增长 50,000+"
-                            : "• 50,000+ follower growth"}
-                        </p>
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 累计原创内容 260+"
-                            : "• 260+ original long-form contents"}
-                        </p>
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 建立稳定内容 SOP 与品牌栏目体系"
-                            : "• Established sustainable editorial SOP systems"}
-                        </p>
-
-                      </div>
-                    </div>
-
-                    {renderStackedCarousel([
-                      "/images/work1-main.jpg",
-                      "/images/work1-detail1.jpg",
-                      "/images/work1-detail2.jpg",
-                    ], "w-full md:w-1/2 pl-6 md:pl-10")}
-                  </div>
-                </div>
-
-
-                {/* PROJECT 02 */}
-                <div className="max-w-[96%] w-full mx-auto min-h-[400px] px-6 md:px-8 py-8 md:py-10 rounded-3xl border border-gray-200/40 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all duration-500 backdrop-blur-xl bg-[#F5F5F5] overflow-hidden">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16">
-                    {renderStackedCarousel(
-                      [
-                        "/images/work2-main.jpg",
-                        "/images/work2-detail1.jpg",
-                        "/images/work2-detail2.jpg",
-                      ],
-                      "w-full md:w-1/2 pr-6 md:pr-10"
-                    )}
-
-                    {/* TEXT */}
-                    <div className="w-full md:w-1/2 flex flex-col justify-center">
-
-                      <div className="text-sm text-gray-400">
-                        02
-                      </div>
-
-                      <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-tight mt-3">
-                        {lang === "zh"
-                          ? "敏捷影像制作：在热点消退前完成质感交付"
-                          : "Agile Visual Production for Fast-Moving Media"}
-                      </h3>
-
-                      <p className="text-sm md:text-base opacity-80 leading-relaxed mt-4">
-                        {lang === "zh"
-                          ? "服务百度、小猿等互联网企业，建立快速响应的短视频生产机制。"
-                          : "Developed rapid-response video production systems for internet brands, balancing speed, storytelling, and visual quality."}
-                      </p>
-
-                      <div className="space-y-2 text-sm text-gray-600/85 leading-6 mt-4">
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 打造 10+ 百万赞爆款视频"
-                            : "• Produced 10+ viral videos"}
-                        </p>
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 单条最高点赞超 200 万"
-                            : "• Highest engagement exceeded 2 million likes"}
-                        </p>
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 后期返工率降低 30%"
-                            : "• Reduced revision rounds by 30%"}
-                        </p>
-
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-
-                {/* PROJECT 03 */}
-                <div className="max-w-[96%] w-full mx-auto min-h-[400px] px-6 md:px-8 py-8 md:py-10 rounded-3xl border border-gray-200/40 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all duration-500 backdrop-blur-xl bg-[#EFEFEF] overflow-hidden">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16">
-                    {/* TEXT */}
-                    <div className="w-full md:w-1/2 flex flex-col justify-center">
-
-                      <div className="text-sm text-gray-400">
-                        03
-                      </div>
-
-                      <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-tight mt-3">
-                        {lang === "zh"
-                          ? "全链路项目统筹：将变量转化为确定性"
-                          : "End-to-End Coordination for Complex Projects"}
-                      </h3>
-
-                      <p className="text-sm md:text-base opacity-80 leading-relaxed mt-4">
-                        {lang === "zh"
-                          ? "统筹高校、品牌与政府项目，从视觉到线下活动实现复杂项目高质量落地。"
-                          : "Led institutional and brand projects from creative planning to on-site execution, ensuring high-quality delivery across multiple stakeholders."}
-                      </p>
-
-                      <div className="space-y-2 text-sm text-gray-600/85 leading-6 mt-4">
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 年度主导项目金额超 130 万"
-                            : "• Managed projects exceeding RMB 1.3M annually"}
-                        </p>
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 单场活动参与超 2000 人"
-                            : "• Events with 2,000+ attendees"}
-                        </p>
-
-                        <p>
-                          {lang === "zh"
-                            ? "• 客户续约率高达 80%"
-                            : "• Achieved 80% client renewal rate"}
-                        </p>
-
-                      </div>
-                    </div>
-
-                    {renderStackedCarousel([
-                      "/images/work3-main.jpg",
-                      "/images/work3-detail1.jpg",
-                      "/images/work3-detail2.jpg",
-                    ], "w-full md:w-1/2 pl-6 md:pl-10")}
-                  </div>
-                </div>
-
-              </div>
-
-            )}
-
-          </div>
-
-          <div
-            onClick={() => setOpenWork2(!openWork2)}
-            className="p-8 border border-white/60 bg-white/70 backdrop-blur-xl rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-1 transition duration-500 cursor-pointer"
+            {lang === "zh" ? "工作经历" : "Experience"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveWorkView("projects");
+              setOpenWorkId(null);
+            }}
+            className={`rounded-full px-4 py-2 text-sm transition-all ${
+              activeWorkView === "projects" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+            }`}
           >
+            {lang === "zh" ? "项目经历" : "Projects"}
+          </button>
+        </div>
 
-            <div className="flex items-center justify-between">
+        <div className="space-y-5">
+          {activeWorkCards.map((item) => {
+            const isOpen = openWorkId === item.id;
 
-              <div>
-                <h3 className="text-lg font-medium">{t.work2Title}</h3>
+            return (
+              <motion.button
+                key={item.id}
+                type="button"
+                onClick={() => setOpenWorkId(isOpen ? "" : item.id)}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.995 }}
+                className="w-full rounded-[28px] border border-gray-200/70 bg-white p-6 md:p-7 text-left shadow-[0_4px_24px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)]"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-6 md:gap-8 items-start">
+                  <div className="font-mono text-sm text-gray-400">{item.time}</div>
 
-                <p className="text-sm text-gray-500 mt-1">
-                  2022 · {t.work2Role}
-                </p>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="text-lg font-medium tracking-tight">
+                        <span className={`transition-colors ${item.accent === "green" ? "hover:text-green-400" : "hover:text-blue-400"}`}>
+                          {lang === "zh" ? item.title.zh : item.title.en}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 text-sm text-gray-500">{lang === "zh" ? item.role.zh : item.role.en}</div>
+                    </div>
 
-                <p className="text-sm text-gray-600 mt-3">{t.work2Desc}</p>
-              </div>
+                    <div className="flex flex-wrap gap-2">
+                      {item.bullets.map((bullet) => (
+                        <span
+                          key={bullet.label.en}
+                          className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-gray-500"
+                        >
+                          {lang === "zh" ? bullet.label.zh : bullet.label.en}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
 
-              <div className="text-gray-400 text-sm">
-                {openWork2 ? "−" : "+"}
-              </div>
+                  <div className="text-gray-400 text-xl leading-none md:pt-1">{isOpen ? "−" : "+"}</div>
+                </div>
 
-            </div>
-
-            {/* EXPANDED TEXT CONTENT - 已调整点号与水木一致 */}
-            {openWork2 && (
-              <div className="mt-8 md:mt-10 p-8 md:p-10 rounded-3xl bg-[#FAFAFA] border border-gray-100 shadow-[inset_0_2px_10px_rgba(0,0,0,0.01)] transition-all duration-500 cursor-default" onClick={(e) => e.stopPropagation()}>
-                {/* 这里从 ul 标签改为了普通的 div 标签，去掉 flex 结构 */}
-                <div className="space-y-5 text-sm text-gray-600/85 leading-6 tracking-wide">
-                  {lang === "zh" ? (
-                    <>
-                      {/* 直接使用文字字符 • 开头，去掉原本蓝色的点 */}
-                      <p>
-                        • 全链路主导 <span className="font-semibold text-gray-900">30+</span> 场品牌活动，单场最高参与破万人，累计拉新 <span className="font-semibold text-gray-900">10,000+</span> 用户。
-                      </p>
-                      <p>
-                        • 统筹周年庆品牌评选，成功联动 <span className="font-semibold text-gray-900">20+</span> 合作品牌实现资源置换与双向曝光。
-                      </p>
-                      <p>
-                        • 独立负责从策划、邀约到数据复盘的完整闭环，单场平均参与率达 <span className="font-semibold text-gray-900">90%</span>。
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      {/* 英文同样调整为简单的 • 字符开头 */}
-                      <p>
-                        • Executed <span className="font-semibold text-gray-900">30+</span> brand campaigns, driving <span className="font-semibold text-gray-900">10,000+</span> new user acquisitions with peak participation exceeding 10,000.
-                      </p>
-                      <p>
-                        • Led the B2B event team for the Anniversary Awards, coordinating with <span className="font-semibold text-gray-900">20+</span> partner brands to maximize cross-platform exposure.
-                      </p>
-                      <p>
-                        • Managed the full lifecycle from planning to data analysis, maintaining an average <span className="font-semibold text-gray-900">90%</span> engagement rate.
-                      </p>
-                    </>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-6 grid gap-5 border-t border-gray-100 pt-6">
+                        {item.bullets.map((bullet) => (
+                          <div key={bullet.label.en} className="space-y-2">
+                            <div className="flex flex-wrap items-center gap-2 text-sm font-medium text-gray-900">
+                              <span>{lang === "zh" ? bullet.label.zh : bullet.label.en}</span>
+                              {bullet.tag ? (
+                                <span className="inline-flex items-center rounded-full border border-green-500/20 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-normal text-green-400">
+                                  {lang === "zh" ? bullet.tag.zh : bullet.tag.en}
+                                </span>
+                              ) : null}
+                            </div>
+                            <p className="max-w-[860px] text-sm leading-6 tracking-wide text-gray-600/85">
+                              {lang === "zh" ? bullet.text.zh : bullet.text.en}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
                   )}
-                </div>
-              </div>
-            )}
-
-          </div>
-
+                </AnimatePresence>
+              </motion.button>
+            );
+          })}
         </div>
       </section>
 
@@ -568,8 +487,8 @@ export default function Home() {
                   ) : (
                     <>
                       <li><span className="font-medium text-gray-900">Focus:</span> Science communication, public psychology, and cross-cultural media impact.</li>
-                      <li><span className="font-medium text-gray-900">Research Thesis:</span> "The Impact of Chinese Science Fiction Films on Scientific Interest, Awareness, and Appreciation among Malaysian Audiences."</li>
-                      <li><span className="font-medium text-gray-900">Practice:</span> Contributed to the "Youth Science Literacy in Malaysia" research, leading survey design and copywriting; Coordinated the University Science Festival (<span className="font-semibold text-gray-900">2,000+</span> participants).</li>
+                      <li><span className="font-medium text-gray-900">Research Thesis:</span> &quot;The Impact of Chinese Science Fiction Films on Scientific Interest, Awareness, and Appreciation among Malaysian Audiences.&quot;</li>
+                      <li><span className="font-medium text-gray-900">Practice:</span> Contributed to the &quot;Youth Science Literacy in Malaysia&quot; research, leading survey design and copywriting; Coordinated the University Science Festival (<span className="font-semibold text-gray-900">2,000+</span> participants).</li>
                     </>
                   )}
                 </ul>
@@ -610,7 +529,7 @@ export default function Home() {
                   ) : (
                     <>
                       <li><span className="font-medium text-gray-900">Overview:</span> 3.5 years of industry experience. Started with a 6-month tech internship, followed by 3 years at an ad agency managing <span className="font-semibold text-gray-900">multi-million-RMB</span> campaigns.</li>
-                      <li><span className="font-medium text-gray-900">Honors:</span> Recognized for excellent cross-functional collaboration and project delivery, awarded the <span className="font-semibold text-gray-900">"2024 Best Employee"</span>.</li>
+                      <li><span className="font-medium text-gray-900">Honors:</span> Recognized for excellent cross-functional collaboration and project delivery, awarded the <span className="font-semibold text-gray-900">&ldquo;2024 Best Employee&rdquo;</span>.</li>
                     </>
                   )}
                 </ul>
@@ -652,8 +571,8 @@ export default function Home() {
                   ) : (
                     <>
                       <li><span className="font-medium text-gray-900">Core Courses:</span> Majored in Advertising Planning, Brand Marketing, Communication Studies, and Copywriting.</li>
-                      <li><span className="font-medium text-gray-900">Practice:</span> Interviewed honorary teachers and assisted in drafting promotional content for the "Top Ten Excellent Teachers" series.</li>
-                      <li><span className="font-medium text-gray-900">Honors:</span> <span className="font-semibold text-gray-900">2nd Prize</span> in photography competition; Awarded Merit Student and National <span className="font-semibold text-gray-900">"Internet+"</span> Competition Award.</li>
+                      <li><span className="font-medium text-gray-900">Practice:</span> Interviewed honorary teachers and assisted in drafting promotional content for the &quot;Top Ten Excellent Teachers&quot; series.</li>
+                      <li><span className="font-medium text-gray-900">Honors:</span> <span className="font-semibold text-gray-900">2nd Prize</span> in photography competition; Awarded Merit Student and National <span className="font-semibold text-gray-900">&quot;Internet+&quot;</span> Competition Award.</li>
                     </>
                   )}
                 </ul>
@@ -849,8 +768,8 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  <p>Currently in a state of "ready to be swept away by a great opportunity."</p>
-                  <p className="mt-2">If you're looking for someone who can seamlessly stitch together project management, creative planning, and powerful execution—or just want to discuss freelance collaboration—feel free to reach out.</p>
+                  <p>Currently in a state of &quot;ready to be swept away by a great opportunity.&quot;</p>
+                  <p className="mt-2">If you&apos;re looking for someone who can seamlessly stitch together project management, creative planning, and powerful execution—or just want to discuss freelance collaboration—feel free to reach out.</p>
                   <p className="mt-4 text-white/70 italic">My response speed? Usually depends on the concentration of coffee at that moment.</p>
                 </>
               )}
